@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+#
+# Debian 7 Wheezy
+#
+# Secure server
+# - sshd (change port, disable root login and password login)
+# - iptables rules
+# - Fail2ban
+#
+# Notes:
+#   After running the script, ssh password login will be disabled,
+#   UPLOAD YOUR PUBLIC KEY with local_scripts/ssh-copy-id
+
+SUDO=yes
+SSHD_PORT=22
+
+# Check sudo
+if [[ $SUDO == yes ]]; then
+  SUDO_CMD="sudo"
+else
+  SUDO_CMD=""
+fi
+
+# Check public key
+if [[ ! -f ~/.ssh/authorized_keys ]]; then
+  echo "$HOME/.ssh/authorized_keys is missing."
+  echo "Upload your public key using local_scripts/ssh-copy-id from your local machine."
+  exit 1
+fi
+
+# SSH
+# Save default sshd_config
+$SUDO_CMD cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original
+$SUDO_CMD chmod a-w /etc/ssh/sshd_config.original
+
+# Copy custom sshd_config template replacing ssh port with $SSHD_PORT
+$SUDO_CMD sed -e 's/$SSHD_PORT/'$SSHD_PORT'/' templates/sshd_config.template > /etc/ssh/sshd_config
+
+# Restart ssh server
+$SUDO_CMD service ssh restart
+
+# iptables
+# Copy the firewall rules template replacing ssh port with $SSHD_PORT
+$SUDO_CMD sed -e 's/$SSHD_PORT/'$SSHD_PORT'/' templates/iptables.firewall.rules.template > /etc/iptables.firewall.rules
+
+# Activate firewall rules
+$SUDO_CMD iptables-restore < /etc/iptables.firewall.rules
+
+# Firewall startup script
+$SUDO_CMD cp templates/firewall /etc/network/if-pre-up.d/firewall
+$SUDO_CMD chmod +x /etc/network/if-pre-up.d/firewall
+
+# Fail2ban
+$SUDO_CMD apt-get install -y fail2ban
+
+cat <<EOF
+#####################################################################
+#
+# secure-server done!
+# 
+# ssh root login has been disabled!
+# ssh password login has been disabled!
+# ssh server is listening on port $SSHD_PORT!
+# incoming connection only allowed to 80, 443 and $SSHD_PORT ports!
+# fail2ban working!
+#
+#####################################################################
+EOF

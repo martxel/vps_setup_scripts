@@ -1,0 +1,1 @@
+echo scp -r ../server_scripts $*:~/server_scripts

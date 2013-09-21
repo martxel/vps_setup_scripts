@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#
+# Debian 7 Wheezy
+#
+# Initial server setup
+# - Installs updates
+# - Installs sudo
+# - Creates initial user
+# - Configures timezone
+# - Configures locales
+#
+# Notes:
+#   Run as root.
+
+# Initial user
+USERNAME=deployer
+
+# Install updates
+apt-get -y update
+apt-get -y full-upgrade
+
+# Install sudo
+apt-get install sudo
+
+# Add initial user
+adduser $USERNAME
+usermod -a -G sudo $USERNAME
+
+# Configure timezone
+dpkg-reconfigure tzdata
+
+# Configure locales
+dpkg-reconfigure locales
+
+cat <<EOF
+#####################################################################
+#
+# initial-setup done!
+# 
+# Before running the secure-server script,
+# you should run local_scripts/ssh-copy-id from your local machine.
+#
+#####################################################################
+EOF
