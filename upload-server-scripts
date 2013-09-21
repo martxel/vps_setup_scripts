@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+scp -r server_scripts $*:~/server_scripts || exit 1
+echo "server_scripts has been uploaded."

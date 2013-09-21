@@ -9,7 +9,7 @@
 #
 # Notes:
 #   After running the script, ssh password login will be disabled,
-#   UPLOAD YOUR PUBLIC KEY with local_scripts/ssh-copy-id
+#   UPLOAD YOUR PUBLIC KEY with ssh-copy-id
 
 SUDO=yes
 SSHD_PORT=22
@@ -24,7 +24,7 @@ fi
 # Check public key
 if [[ ! -f ~/.ssh/authorized_keys ]]; then
   echo "$HOME/.ssh/authorized_keys is missing."
-  echo "Upload your public key using local_scripts/ssh-copy-id from your local machine."
+  echo "Upload your public key using ssh-copy-id from your local machine."
   exit 1
 fi
 
