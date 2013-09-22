@@ -13,18 +13,18 @@
     ssh root@yourserver.com
     ./initial-setup
 
-The script will ask your new user's password, your timezone and the locales you
+The script will ask a password for your new user, information for the new user, your timezone and the locales you
 want to build.
 
 ### Step 3: Upload your public key for the deployer user
 
-From your *local* machine:
+From your **local** machine:
     ./ssh-copy-id deployer@yourserver.com
 
 You should be able to connect to the server without a password
     ssh deployer@yourserver.com
 
-### Step 4: Upload the server_scripts with the *user you have created*
+### Step 4: Upload the server_scripts with the user you have created
 
     ./upload-server-scripts deployer@yourserver.com
 
