@@ -19,9 +19,11 @@ want to build.
 ### Step 3: Upload your public key for the deployer user
 
 From your **local** machine:
+
     ./ssh-copy-id deployer@yourserver.com
 
-You should be able to connect to the server without a password
+You should be able to connect to the server without a password:
+
     ssh deployer@yourserver.com
 
 ### Step 4: Upload the server_scripts with the user you have created
@@ -37,11 +39,12 @@ Then run:
     ssh deployer@yourserver.com
     ./server_scripts/secure-server
 
-You won't be able to connect throught ssh with the root user anymore.
+You won't be able to connect through ssh with the root user anymore.
+
+You won't be able to login through ssh with password auth anymore.
 
 iptables will only allow external connections to http, https and ssh ports.
 
-
 ### Step 6 (optional): Run application installation scripts
 
-You can run the different application installation scripts from server_scripts/applications
+You can run the different application installation scripts from server_scripts/applications.
