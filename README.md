@@ -1,4 +1,4 @@
-# VPS setup scripts
+# VPS setup scripts for Debian 7 Wheezy
 
 ## Installation
 
