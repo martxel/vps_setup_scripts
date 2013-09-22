@@ -21,6 +21,9 @@ else
   SUDO_CMD=""
 fi
 
+TEMPLATES_DIR="`dirname \"$0\"`"/templates
+SED_SSHD='s/$SSHD_PORT/'$SSHD_PORT'/'
+
 # Check public key
 if [[ ! -f ~/.ssh/authorized_keys ]]; then
   echo "$HOME/.ssh/authorized_keys is missing."
@@ -34,20 +37,23 @@ $SUDO_CMD cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original
 $SUDO_CMD chmod a-w /etc/ssh/sshd_config.original
 
 # Copy custom sshd_config template replacing ssh port with $SSHD_PORT
-$SUDO_CMD sed -e 's/$SSHD_PORT/'$SSHD_PORT'/' templates/sshd_config.template > /etc/ssh/sshd_config
+$SUDO_CMD sh -c "sed -e '$SED_SSHD' $TEMPLATES_DIR/sshd_config.template > /etc/ssh/sshd_config"
 
 # Restart ssh server
 $SUDO_CMD service ssh restart
 
 # iptables
 # Copy the firewall rules template replacing ssh port with $SSHD_PORT
-$SUDO_CMD sed -e 's/$SSHD_PORT/'$SSHD_PORT'/' templates/iptables.firewall.rules.template > /etc/iptables.firewall.rules
+$SUDO_CMD sh -c "sed -e '$SED_SSHD' $TEMPLATES_DIR/iptables.firewall.rules.template > /etc/iptables.firewall.rules"
+
+# Flush iptables rules
+$SUDO_CMD iptables -F
 
 # Activate firewall rules
 $SUDO_CMD iptables-restore < /etc/iptables.firewall.rules
 
 # Firewall startup script
-$SUDO_CMD cp templates/firewall /etc/network/if-pre-up.d/firewall
+$SUDO_CMD cp $TEMPLATES_DIR/firewall /etc/network/if-pre-up.d/firewall
 $SUDO_CMD chmod +x /etc/network/if-pre-up.d/firewall
 
 # Fail2ban

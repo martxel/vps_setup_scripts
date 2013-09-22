@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+scp -r server_scripts/initial-setup $*:~/ || exit 1
+echo "initial-setup has been uploaded."
