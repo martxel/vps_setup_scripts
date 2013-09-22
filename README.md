@@ -13,8 +13,11 @@
     ssh root@yourserver.com
     ./initial-setup
 
-The script will ask a password for your new user, information for the new user, your timezone and the locales you
-want to build.
+This script will update the system, install sudo, create the deployer user, configure the timezone and build the locales you need.
+
+It will ask a password for your new user, information for the new user, your timezone and the locales you want to build.
+
+Leave empty the default system locale.
 
 ### Step 3: Upload your public key for the deployer user
 
